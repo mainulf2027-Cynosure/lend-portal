@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> Contact Messages</div>
+    <div class="panel">
+      <div class="phead">Contact Messages <span class="mu" style="font-weight:normal;font-size:10px;">(<%= contacts.length %> total)</span></div>
+      <div class="pbody" style="padding:0;">
+        <% if (contacts.length === 0) { %>
+          <div class="empty">No messages yet.</div>
+        <% } else { %>
+          <div class="dtable-wrap">
+            <table class="dtable">
+              <thead>
+                <tr>
+                  <th style="width:16px;"></th>
+                  <th>From</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                  <th style="width:90px;">Date</th>
+                  <th style="width:60px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% contacts.forEach(c => { %>
+                <tr style="<%= !c.read ? 'font-weight:bold;' : '' %>">
+                  <td class="tc" style="font-size:9px;"><%= !c.read ? '<span class="s-new">N</span>' : '' %></td>
+                  <td class="nw" style="font-size:11px;">
+                    <%= c.name %>
+                    <div style="font-size:9px;font-weight:normal;color:var(--grey-text);"><a href="mailto:<%= c.email %>" class="link"><%= c.email %></a></div>
+                  </td>
+                  <td style="font-size:10px;"><%= c.subject || '—' %></td>
+                  <td style="font-size:10px;max-width:300px;">
+                    <div style="white-space:pre-wrap;word-wrap:break-word;"><%= c.message.length > 200 ? c.message.substring(0,200) + '...' : c.message %></div>
+                  </td>
+                  <td class="nw mu" style="font-size:10px;"><%= c.created_at.substring(0,10).replace(/-/g,'/') %><br><span style="font-size:9px;"><%= c.created_at.substring(11,16) %></span></td>
+                  <td>
+                    <form method="POST" action="/admin/contacts/<%= c.id %>/delete" onsubmit="return confirm('Delete this message?')">
+                      <button type="submit" class="btn btn-sm" style="color:var(--red);">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div id="top-header">
+  <div class="brand-row">
+    <div class="brand" style="min-width:200px;">
+      LEND Admin
+      <span class="ed">Content Management System</span>
+      <span class="ed" style="color:#f0d0d0;font-size:9px;">Mainul Fahad</span>
+    </div>
+    <div class="user-info">
+      <div class="f"><span class="l">Operator:</span> <span><%= user ? user.username : '—' %></span></div>
+      <div class="f"><span class="l">Module:</span> <span>CMS v1.0</span></div>
+    </div>
+    <div class="top-actions">
+      <a href="/" target="_blank" class="btn" style="font-size:10px;">View Site</a>
+      <form method="POST" action="/admin/logout" style="display:inline;margin:0;">
+        <button type="submit" class="btn btn-primary" style="font-size:10px;">Log Out</button>
+      </form>
+    </div>
+  </div>
+</div>

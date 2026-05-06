@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div id="breadcrumb" style="flex:1;">Admin <span class="bcsep">&gt;</span> Videos</div>
+      <a href="/admin/videos/new" class="btn btn-primary" style="margin-left:8px;">+ Add Video</a>
+    </div>
+    <div class="panel">
+      <div class="phead">Videos <span class="mu" style="font-weight:normal;font-size:10px;">(<%= videos.length %> total)</span></div>
+      <div class="pbody" style="padding:0;">
+        <% if (videos.length === 0) { %>
+          <div class="empty">No videos yet. <a href="/admin/videos/new" class="link">Add your first video.</a></div>
+        <% } else { %>
+          <div class="dtable-wrap">
+            <table class="dtable">
+              <thead><tr><th>Title</th><th style="width:80px;">Type</th><th style="width:90px;">Date</th><th style="width:60px;" class="tc">Status</th><th style="width:110px;">Actions</th></tr></thead>
+              <tbody>
+                <% videos.forEach(v => { %>
+                <tr>
+                  <td><a href="/admin/videos/<%= v.id %>/edit" class="link"><%= v.title %></a></td>
+                  <td class="mu" style="font-size:10px;"><%= v.embed_url ? 'Embed' : v.filename ? 'Local File' : '—' %></td>
+                  <td class="nw mu" style="font-size:10px;"><%= v.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                  <td class="tc"><span class="<%= v.published ? 's-app':'s-arc' %>"><%= v.published ? 'Published':'Draft' %></span></td>
+                  <td class="nw">
+                    <a href="/admin/videos/<%= v.id %>/edit" class="btn btn-sm">Edit</a>
+                    <% if (v.published) { %><a href="/videos" target="_blank" class="btn btn-sm">View</a><% } %>
+                    <form method="POST" action="/admin/videos/<%= v.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this video?')">
+                      <button type="submit" class="btn btn-sm" style="color:var(--red);">Del</button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

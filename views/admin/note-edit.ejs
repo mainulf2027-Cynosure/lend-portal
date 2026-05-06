@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> <a href="/admin/notes" class="link">Notes</a> <span class="bcsep">&gt;</span> <%= note ? 'Edit' : 'New' %></div>
+
+    <form method="POST" action="<%= note ? '/admin/notes/'+note.id+'/edit' : '/admin/notes/new' %>">
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+        <div style="flex:1;min-width:0;">
+          <div class="panel" style="margin-bottom:6px;">
+            <div class="phead">Note</div>
+            <div class="pbody" style="padding:8px;">
+              <div class="ff">
+                <label>Title *</label>
+                <input type="text" name="title" value="<%= note ? note.title : '' %>" required maxlength="300" style="max-width:100%;font-size:12px;height:22px;">
+              </div>
+              <div class="ff">
+                <label>Tags <span class="ff-hint">(comma-separated)</span></label>
+                <input type="text" name="tags" value="<%= note ? note.tags || '' : '' %>" maxlength="500" placeholder="tag1, tag2">
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="phead">
+              Content (Markdown)
+              <span class="ph-link"><a href="#" id="toggle-preview" class="link">Show Preview</a></span>
+            </div>
+            <div class="pbody" style="padding:6px;">
+              <div class="editor-split">
+                <div class="ff" style="flex:1;margin-bottom:0;">
+                  <textarea name="content" id="md-content" rows="26" style="width:100%;min-height:380px;" placeholder="Write in Markdown..."><%= note ? note.content || '' : '' %></textarea>
+                </div>
+                <div id="preview-wrap" style="flex:1;display:none;flex-direction:column;">
+                  <div class="preview-label">Preview</div>
+                  <div class="md-preview" id="md-preview" style="min-height:380px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:180px;flex-shrink:0;">
+          <div class="panel">
+            <div class="phead">Visibility</div>
+            <div class="pbody" style="padding:8px;">
+              <label class="ff-check"><input type="checkbox" name="isPublic" value="1" <%= note && note.public ? 'checked':'' %>> Publicly visible</label>
+              <div style="font-size:9px;color:var(--grey-text);margin-top:3px;margin-bottom:8px;">Private notes are only visible in the admin panel.</div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <button type="submit" class="btn btn-primary" style="width:100%;">Save Note</button>
+                <a href="/admin/notes" class="btn" style="width:100%;text-align:center;display:block;text-decoration:none;">Cancel</a>
+              </div>
+              <% if (note) { %>
+              <div style="margin-top:8px;font-size:9px;color:var(--grey-text);">
+                Updated: <%= note.updated_at.substring(0,10).replace(/-/g,'/') %>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const ta=document.getElementById('md-content'),preview=document.getElementById('md-preview'),wrap=document.getElementById('preview-wrap'),btn=document.getElementById('toggle-preview');
+  let showing=false;
+  function up(){if(showing)preview.innerHTML=marked.parse(ta.value||'');}
+  btn.addEventListener('click',function(e){e.preventDefault();showing=!showing;wrap.style.display=showing?'flex':'none';btn.textContent=showing?'Hide Preview':'Show Preview';up();});
+  ta.addEventListener('input',up);
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body>
+<%- include('../partials/public-header', { activePage }) %>
+<div id="page-shell">
+<div id="breadcrumb">Home</div>
+<div id="main">
+
+  <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+
+  <div class="home-grid" style="margin-bottom:6px;">
+
+    <!-- Welcome panel -->
+    <div class="panel grid-full" style="border-left:3px solid var(--red-top);">
+      <div class="phead">
+        Welcome — LEND Portal
+        <span class="ph-link"><a href="/about" class="link">About Me &gt;&gt;</a></span>
+      </div>
+      <div class="pbody" style="padding:8px 10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div>
+            <div style="font-size:14px;font-weight:bold;color:var(--crimson-text);margin-bottom:3px;">Mainul Fahad</div>
+            <div style="font-size:11px;color:var(--grey-text);margin-bottom:8px;">Linear Engineering &amp; Neural Development</div>
+            <% if (aboutSnippet) { %>
+              <div class="rc" style="font-size:11px;"><%- aboutSnippet %></div>
+            <% } else { %>
+              <div style="font-size:11px;color:var(--grey-text);">[About Me content not yet added. Edit via Admin &gt; About Me.]</div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Blog Posts -->
+    <div class="panel">
+      <div class="phead">
+        Recent Posts
+        <span class="ph-link"><a href="/blog" class="link">All Posts &gt;&gt;</a></span>
+      </div>
+      <div class="pbody" style="padding:0;">
+        <% if (recentPosts.length === 0) { %>
+          <div class="empty">No published posts yet.</div>
+        <% } else { %>
+          <table class="dtable" style="width:100%;">
+            <tbody>
+              <% recentPosts.forEach(p => { %>
+              <tr>
+                <td><a href="/blog/<%= p.slug %>" class="link"><%= p.title %></a></td>
+                <td class="nw mu" style="width:80px;font-size:10px;"><%= p.created_at.substring(0,10).replace(/-/g,'/') %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Recent Notes -->
+    <div class="panel">
+      <div class="phead">
+        Notes
+        <span class="ph-link"><a href="/notes" class="link">All Notes &gt;&gt;</a></span>
+      </div>
+      <div class="pbody" style="padding:0;">
+        <% if (publicNotes.length === 0) { %>
+          <div class="empty">No public notes yet.</div>
+        <% } else { %>
+          <table class="dtable" style="width:100%;">
+            <tbody>
+              <% publicNotes.forEach(n => { %>
+              <tr>
+                <td><a href="/notes/<%= n.slug %>" class="link"><%= n.title %></a></td>
+                <td class="nw mu" style="width:80px;font-size:10px;"><%= n.created_at.substring(0,10).replace(/-/g,'/') %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+
+  </div><!-- /home-grid -->
+
+  <!-- Projects -->
+  <div class="panel" style="margin-bottom:6px;">
+    <div class="phead">
+      Projects
+      <span class="ph-link"><a href="/projects" class="link">All Projects &gt;&gt;</a></span>
+    </div>
+    <div class="pbody">
+      <% if (recentProjects.length === 0) { %>
+        <div class="empty">No published projects yet.</div>
+      <% } else { %>
+        <div class="proj-grid">
+          <% recentProjects.forEach(p => { %>
+          <div class="panel">
+            <div class="phead" style="font-size:11px;">
+              <a href="/projects/<%= p.slug %>" class="link" style="font-weight:bold;"><%= p.title %></a>
+              <span class="pstatus pstatus-<%= p.status %>"><%= p.status.toUpperCase() %></span>
+            </div>
+            <div class="pbody" style="font-size:10px;color:#444;">
+              <%= p.description ? p.description.substring(0,120) + (p.description.length > 120 ? '...' : '') : '—' %>
+              <% if (p.technologies) { %><div style="margin-top:4px;"><% p.technologies.split(',').forEach(t => { %><span class="tag"><%= t.trim() %></span><% }) %></div><% } %>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+</div><!-- /main -->
+<%- include('../partials/public-footer') %>
+</div>
+</body>
+</html>

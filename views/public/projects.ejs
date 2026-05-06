@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body>
+<%- include('../partials/public-header', { activePage }) %>
+<div id="page-shell">
+<div id="breadcrumb"><a href="/">Home</a><span class="bcsep">&gt;</span>Projects</div>
+<div id="main">
+  <% if (projects.length === 0) { %>
+    <div class="panel">
+      <div class="phead">Projects</div>
+      <div class="pbody"><div class="empty">No projects published yet.</div></div>
+    </div>
+  <% } else { %>
+    <div class="proj-grid">
+      <% projects.forEach(p => { %>
+      <div class="panel">
+        <div class="phead" style="display:flex;justify-content:space-between;align-items:center;">
+          <a href="/projects/<%= p.slug %>" class="link" style="font-weight:bold;font-size:11px;"><%= p.title %></a>
+          <span class="pstatus pstatus-<%= p.status %>"><%= p.status.toUpperCase() %></span>
+        </div>
+        <div class="pbody">
+          <div style="font-size:11px;margin-bottom:5px;color:#333;"><%= p.description ? p.description.substring(0,150) + (p.description.length>150?'...':'') : '—' %></div>
+          <% if (p.technologies) { %><div><% p.technologies.split(',').forEach(t => { %><span class="tag"><%= t.trim() %></span><% }) %></div><% } %>
+          <div style="margin-top:5px;">
+            <a href="/projects/<%= p.slug %>" class="btn btn-sm">Details &gt;&gt;</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+<%- include('../partials/public-footer') %>
+</div>
+</body>
+</html>

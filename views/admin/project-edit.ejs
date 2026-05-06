@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> <a href="/admin/projects" class="link">Projects</a> <span class="bcsep">&gt;</span> <%= project ? 'Edit' : 'New' %></div>
+
+    <form method="POST" action="<%= project ? '/admin/projects/'+project.id+'/edit' : '/admin/projects/new' %>">
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+
+        <div style="flex:1;min-width:0;">
+          <div class="panel" style="margin-bottom:6px;">
+            <div class="phead">Project Details</div>
+            <div class="pbody" style="padding:8px;">
+              <div class="ff">
+                <label>Title *</label>
+                <input type="text" name="title" value="<%= project ? project.title : '' %>" required maxlength="300" style="max-width:100%;font-size:12px;height:22px;">
+              </div>
+              <div class="ff">
+                <label>Short Description <span class="ff-hint">(shown in project cards)</span></label>
+                <textarea name="description" rows="2"><%= project ? project.description || '' : '' %></textarea>
+              </div>
+              <div class="ff-row">
+                <div class="ff">
+                  <label>Technologies <span class="ff-hint">(comma-separated)</span></label>
+                  <input type="text" name="technologies" value="<%= project ? project.technologies || '' : '' %>" placeholder="Python, Node.js, React">
+                </div>
+                <div class="ff" style="max-width:140px;">
+                  <label>Status</label>
+                  <select name="status">
+                    <option value="active"   <%= (!project || project.status==='active')   ? 'selected':'' %>>Active</option>
+                    <option value="wip"      <%= (project && project.status==='wip')       ? 'selected':'' %>>Work in Progress</option>
+                    <option value="archived" <%= (project && project.status==='archived')  ? 'selected':'' %>>Archived</option>
+                  </select>
+                </div>
+              </div>
+              <div class="ff-row">
+                <div class="ff">
+                  <label>Repository URL</label>
+                  <input type="url" name="repo_url" value="<%= project ? project.repo_url || '' : '' %>" placeholder="https://github.com/...">
+                </div>
+                <div class="ff">
+                  <label>Demo / Live URL</label>
+                  <input type="url" name="demo_url" value="<%= project ? project.demo_url || '' : '' %>" placeholder="https://...">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="phead">
+              Description / README (Markdown)
+              <span class="ph-link"><a href="#" id="toggle-preview" class="link">Show Preview</a></span>
+            </div>
+            <div class="pbody" style="padding:6px;">
+              <div class="editor-split">
+                <div class="ff" style="flex:1;margin-bottom:0;">
+                  <textarea name="content" id="md-content" rows="22" style="width:100%;min-height:320px;" placeholder="Describe this project in Markdown..."><%= project ? project.content || '' : '' %></textarea>
+                </div>
+                <div id="preview-wrap" style="flex:1;display:none;flex-direction:column;">
+                  <div class="preview-label">Preview</div>
+                  <div class="md-preview" id="md-preview" style="min-height:320px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right sidebar -->
+        <div style="width:180px;flex-shrink:0;">
+          <div class="panel" style="margin-bottom:6px;">
+            <div class="phead">Publish</div>
+            <div class="pbody" style="padding:8px;">
+              <label class="ff-check"><input type="checkbox" name="published" value="1" <%= project && project.published ? 'checked':'' %>> Published</label>
+              <label class="ff-check"><input type="checkbox" name="featured"  value="1" <%= project && project.featured  ? 'checked':'' %>> Featured on home</label>
+              <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;">
+                <button type="submit" class="btn btn-primary" style="width:100%;">Save Project</button>
+                <a href="/admin/projects" class="btn" style="width:100%;text-align:center;display:block;text-decoration:none;">Cancel</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+    <!-- Downloads / file uploads (only when editing existing project) -->
+    <% if (project) { %>
+    <div class="panel" style="margin-top:8px;">
+      <div class="phead">Downloadable Files</div>
+      <div class="pbody">
+        <% if (files.length > 0) { %>
+          <table class="dtable" style="width:100%;margin-bottom:8px;">
+            <thead><tr><th>Filename</th><th>Size</th><th>Description</th><th style="width:70px;">Action</th></tr></thead>
+            <tbody>
+              <% files.forEach(f => { %>
+              <tr>
+                <td class="nw"><span class="ico ico-file"></span> <span style="font-size:11px;"><%= f.original_name %></span></td>
+                <td class="nw mu" style="font-size:10px;"><%= formatBytes(f.size) %></td>
+                <td style="font-size:10px;color:var(--grey-text);"><%= f.description || '—' %></td>
+                <td>
+                  <a href="/admin/projects/files/<%= f.id %>/delete" class="btn btn-sm" style="color:var(--red);" onclick="return confirm('Delete this file?')">Delete</a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div style="font-size:11px;color:var(--grey-text);margin-bottom:8px;">No files uploaded yet.</div>
+        <% } %>
+        <form method="POST" action="/admin/projects/<%= project.id %>/upload" enctype="multipart/form-data">
+          <div style="display:flex;gap:6px;align-items:flex-end;">
+            <div class="ff" style="flex:1;margin:0;">
+              <label>Upload File</label>
+              <input type="file" name="file" required style="font-size:11px;">
+            </div>
+            <div class="ff" style="flex:1;margin:0;">
+              <label>Description (optional)</label>
+              <input type="text" name="description" placeholder="v1.0.0 — Windows x64" style="max-width:100%;">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const ta = document.getElementById('md-content');
+  const preview = document.getElementById('md-preview');
+  const wrap = document.getElementById('preview-wrap');
+  const btn = document.getElementById('toggle-preview');
+  let showing = false;
+  function updatePreview() { if (showing) preview.innerHTML = marked.parse(ta.value || ''); }
+  btn.addEventListener('click', function(e) {
+    e.preventDefault(); showing = !showing;
+    wrap.style.display = showing ? 'flex' : 'none';
+    btn.textContent = showing ? 'Hide Preview' : 'Show Preview';
+    updatePreview();
+  });
+  ta.addEventListener('input', updatePreview);
+</script>
+</body>
+</html>

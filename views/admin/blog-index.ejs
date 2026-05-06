@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div id="breadcrumb" style="flex:1;">Admin <span class="bcsep">&gt;</span> Blog Posts</div>
+      <a href="/admin/blog/new" class="btn btn-primary" style="margin-left:8px;">+ New Post</a>
+    </div>
+    <div class="panel">
+      <div class="phead">Blog Posts <span class="mu" style="font-weight:normal;font-size:10px;">(<%= posts.length %> total)</span></div>
+      <div class="pbody" style="padding:0;">
+        <% if (posts.length === 0) { %>
+          <div class="empty">No posts yet. <a href="/admin/blog/new" class="link">Create your first post.</a></div>
+        <% } else { %>
+          <div class="dtable-wrap">
+            <table class="dtable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th style="width:90px;">Created</th>
+                  <th style="width:60px;" class="tc">Status</th>
+                  <th style="width:60px;" class="tc">Featured</th>
+                  <th style="width:90px;">Tags</th>
+                  <th style="width:100px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% posts.forEach(p => { %>
+                <tr>
+                  <td><a href="/admin/blog/<%= p.id %>/edit" class="link"><%= p.title %></a></td>
+                  <td class="nw mu" style="font-size:10px;"><%= p.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                  <td class="tc"><span class="<%= p.published ? 's-app':'s-arc' %>"><%= p.published ? 'Published':'Draft' %></span></td>
+                  <td class="tc"><span style="color:var(--grey-text);"><%= p.featured ? '&#9733;':'' %></span></td>
+                  <td style="font-size:9px;color:var(--grey-text);"><%= p.tags || '—' %></td>
+                  <td class="nw">
+                    <a href="/admin/blog/<%= p.id %>/edit" class="btn btn-sm">Edit</a>
+                    <% if (p.published) { %><a href="/blog/<%= p.slug %>" target="_blank" class="btn btn-sm">View</a><% } %>
+                    <form method="POST" action="/admin/blog/<%= p.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this post?')">
+                      <button type="submit" class="btn btn-sm" style="color:var(--red);">Del</button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

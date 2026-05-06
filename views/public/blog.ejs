@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body>
+<%- include('../partials/public-header', { activePage }) %>
+<div id="page-shell">
+<div id="breadcrumb"><a href="/">Home</a><span class="bcsep">&gt;</span>Blog</div>
+<div id="main">
+  <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+
+  <div class="panel">
+    <div class="phead">
+      Blog Posts
+      <span class="ph-link mu"><%= total %> post<%= total !== 1 ? 's' : '' %> total</span>
+    </div>
+    <div class="pbody" style="padding:0;">
+      <% if (posts.length === 0) { %>
+        <div class="empty">No posts published yet.</div>
+      <% } else { %>
+        <div class="dtable-wrap">
+          <table class="dtable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th style="width:90px;">Date</th>
+                <th>Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% posts.forEach(p => { %>
+              <tr>
+                <td>
+                  <a href="/blog/<%= p.slug %>" class="link"><%= p.title %></a>
+                  <% if (p.excerpt) { %><div style="font-size:10px;color:var(--grey-text);margin-top:1px;"><%= p.excerpt.substring(0,100) %><%= p.excerpt.length > 100 ? '...' : '' %></div><% } %>
+                </td>
+                <td class="nw mu" style="font-size:10px;"><%= p.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                <td style="font-size:10px;"><%= p.tags || '' %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <% if (totalPages > 1) { %>
+        <div class="pager">
+          <% if (currentPage > 1) { %><a href="/blog?page=<%= currentPage-1 %>" class="pg-btn">&laquo; Prev</a><% } %>
+          <% for(let i=1;i<=totalPages;i++) { %><a href="/blog?page=<%= i %>" class="pg-btn <%= i===currentPage?'cur':'' %>"><%= i %></a><% } %>
+          <% if (currentPage < totalPages) { %><a href="/blog?page=<%= currentPage+1 %>" class="pg-btn">Next &raquo;</a><% } %>
+        </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/public-footer') %>
+</div>
+</body>
+</html>

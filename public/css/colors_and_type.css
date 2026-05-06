@@ -1,0 +1,116 @@
+/* ══════════════════════════════════════════════════════
+   LEND DESIGN SYSTEM — TOKENS
+   Linear Engineering & Neural Dynamics
+   Enterprise Windows-Classic chrome, crimson palette.
+   ══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── BASE CHROME (Windows Classic neutrals — unchanged) ── */
+  --win-face:    #d4d0c8;   /* button & window face */
+  --win-light:   #ffffff;   /* light bevel edge */
+  --win-lite2:   #f0ede5;   /* secondary inner-light */
+  --win-shadow:  #808070;   /* inner shadow */
+  --win-dark:    #404038;   /* dark bevel edge */
+  --win-bg:      #d4d0c8;   /* desktop fill */
+  --win-panel:   #ffffff;   /* data surface */
+  --win-side:    #eceae0;   /* sidebar / rpanel fill */
+
+  /* ── PRIMARY: CRIMSON (replaces NT blue) ── */
+  --red-top:     #8a1a1a;   /* title bar / btn-primary top */
+  --red-mid:     #6e1414;
+  --red-bot:     #5a0e0e;   /* title bar / btn-primary bottom */
+  --red-border:  #3a0808;   /* hard outline */
+  --red-hi:      #b04040;   /* hover bevel light */
+  --red-lo:      #2a0404;   /* hover bevel dark */
+
+  /* ── SECONDARY CRIMSON (sub-bars, breadcrumb accents) ── */
+  --red-sec-top: #a44848;
+  --red-sec-bot: #843030;
+
+  /* ── TABLE HEADER (warm grey-pink, was bluish) ── */
+  --th-top:      #e8d4d4;
+  --th-bot:      #d0b4b4;
+  --th-text:     #3a0808;
+
+  /* ── ROWS ── */
+  --row-even:    #f4f2ee;
+  --row-hover:   #f4d8d8;   /* warm pink wash on hover */
+
+  /* ── BORDERS ── */
+  --border:      #a0998c;
+  --border-dark: #706860;
+
+  /* ── SEMANTIC TEXT ── */
+  --link:        #8a0000;   /* was #0000aa navy → crimson */
+  --link-hover:  #cc0000;
+  --red:         #aa0000;
+  --green:       #005500;
+  --orange:      #885500;
+  --warn:        #995500;
+  --crimson-text:#3a0808;   /* replaces #003388 navy text */
+  --grey-text:   #707060;
+
+  /* ── BREADCRUMB / TOOLBAR FILLS ── */
+  --bc-bg:       #ece9e0;
+  --tb-bg:       #e0dcd2;
+
+  /* ══════════════════════════════════════════════════════
+     TYPE TOKENS
+     ══════════════════════════════════════════════════════ */
+  --font-sans:   Tahoma, "MS Sans Serif", Verdana, Geneva, sans-serif;
+  --font-mono:   "Lucida Console", "Courier New", monospace;
+
+  --fs-micro:    9px;
+  --fs-small:    10px;
+  --fs-body:     11px;
+  --fs-brand:    13px;
+  --fs-h1:       14px;   /* the largest size in the system */
+  --lh-base:     1.35;
+  --lh-dense:    1.7;
+
+  --fw-normal:   400;
+  --fw-bold:     700;
+}
+
+/* ══════════════════════════════════════════════════════
+   SEMANTIC ELEMENT DEFAULTS
+   ══════════════════════════════════════════════════════ */
+body {
+  font-family: var(--font-sans);
+  font-size:   var(--fs-body);
+  line-height: var(--lh-base);
+  background:  var(--win-bg);
+  color:       #000;
+}
+
+h1, .h1 { font-size: var(--fs-h1);    font-weight: var(--fw-bold); color: var(--crimson-text); margin: 0; }
+h2, .h2 { font-size: var(--fs-brand); font-weight: var(--fw-bold); color: var(--crimson-text); margin: 0; }
+h3, .h3 { font-size: var(--fs-body);  font-weight: var(--fw-bold); color: #000; margin: 0; }
+h4, .h4 { font-size: var(--fs-small); font-weight: var(--fw-bold); color: #000; margin: 0; letter-spacing: 0.03em; text-transform: none; }
+
+p, .p   { font-size: var(--fs-body);  line-height: var(--lh-base); margin: 0; }
+small, .small { font-size: var(--fs-small); }
+.micro  { font-size: var(--fs-micro); color: var(--grey-text); }
+
+a, .link { color: var(--link); text-decoration: underline; cursor: pointer; }
+a:hover, .link:hover { color: var(--link-hover); }
+
+code, .code { font-family: var(--font-mono); font-size: var(--fs-small); background: #f4f2ee; padding: 0 3px; border: 1px solid var(--border); }
+
+/* ══════════════════════════════════════════════════════
+   SEVERITY TAGS (text-only, bracketed)
+   ══════════════════════════════════════════════════════ */
+.t-imp { color: var(--red);          font-weight: var(--fw-bold); font-size: var(--fs-small); }
+.t-wrn { color: var(--warn);         font-weight: var(--fw-bold); font-size: var(--fs-small); }
+.t-ntc { color: var(--crimson-text); font-size: var(--fs-small); }
+.t-upd { color: var(--green);        font-size: var(--fs-small); }
+
+/* status pills (text only, inherit from row) */
+.s-new { color: var(--red);          font-weight: var(--fw-bold); }
+.s-rev { color: var(--crimson-text); font-weight: var(--fw-bold); }
+.s-app { color: var(--green);        font-weight: var(--fw-bold); }
+.s-arc { color: var(--grey-text); }
+
+.p-hi  { color: var(--red);    font-weight: var(--fw-bold); }
+.p-md  { color: var(--orange); }
+.p-lo  { color: var(--green);  }

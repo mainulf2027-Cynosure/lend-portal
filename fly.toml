@@ -1,0 +1,33 @@
+# fly.toml — LEND Personal Portal
+# Before deploying:
+#   1. Run: fly apps create lend-portal   (or pick your own app name and update `app` below)
+#   2. Run: fly volumes create lend_data --size 3 --region iad
+#   3. Run: fly secrets set SESSION_SECRET=$(openssl rand -hex 32)
+#   4. Run: fly deploy
+
+app = "lend-portal"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PORT = "3000"
+  NODE_ENV = "production"
+  DATA_DIR = "/data/db"
+  UPLOAD_BASE = "/data/uploads"
+
+[[mounts]]
+  source = "lend_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1

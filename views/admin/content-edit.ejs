@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">
+      Admin <span class="bcsep">&gt;</span>
+      <a href="<%= cancelUrl %>" class="link"><%= type === 'post' ? 'Blog Posts' : type === 'article' ? 'Articles' : 'Notes' %></a>
+      <span class="bcsep">&gt;</span> <%= item ? 'Edit' : 'New' %>
+    </div>
+
+    <form method="POST" action="<%= action %>">
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+
+        <!-- Left: main form -->
+        <div style="flex:1;min-width:0;">
+          <div class="panel" style="margin-bottom:6px;">
+            <div class="phead">Content</div>
+            <div class="pbody" style="padding:8px;">
+              <div class="ff">
+                <label>Title *</label>
+                <input type="text" name="title" value="<%= item ? item.title : '' %>" required maxlength="300" style="max-width:100%;font-size:12px;height:22px;">
+              </div>
+              <% if (hasExcerpt) { %>
+              <div class="ff">
+                <label>Excerpt <span class="ff-hint">(optional — shown in listings)</span></label>
+                <textarea name="excerpt" rows="2"><%= item ? item.excerpt || '' : '' %></textarea>
+              </div>
+              <% } %>
+              <div class="ff">
+                <label>Tags <span class="ff-hint">(comma-separated)</span></label>
+                <input type="text" name="tags" value="<%= item ? item.tags || '' : '' %>" maxlength="500" placeholder="tag1, tag2, tag3">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="phead">
+              Content (Markdown)
+              <span class="ph-link"><a href="#" id="toggle-preview" class="link">Show Preview</a></span>
+            </div>
+            <div class="pbody" style="padding:6px;">
+              <div class="editor-split">
+                <div class="ff" style="flex:1;margin-bottom:0;">
+                  <textarea name="content" id="md-content" rows="28" style="width:100%;min-height:400px;" placeholder="Write in Markdown..."><%= item ? item.content || '' : '' %></textarea>
+                </div>
+                <div id="preview-wrap" style="flex:1;display:none;flex-direction:column;">
+                  <div class="preview-label">Preview</div>
+                  <div class="md-preview" id="md-preview" style="min-height:400px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: publish options -->
+        <div style="width:180px;flex-shrink:0;">
+          <div class="panel">
+            <div class="phead">Publish</div>
+            <div class="pbody" style="padding:8px;">
+              <label class="ff-check">
+                <input type="checkbox" name="published" value="1" <%= item && item.published ? 'checked' : '' %>>
+                Published (visible)
+              </label>
+              <% if (hasFeatured) { %>
+              <label class="ff-check">
+                <input type="checkbox" name="featured" value="1" <%= item && item.featured ? 'checked' : '' %>>
+                Featured on home
+              </label>
+              <% } %>
+              <div class="form-actions" style="padding-top:6px;border-top:1px solid var(--border);flex-direction:column;gap:3px;margin-top:8px;">
+                <button type="submit" class="btn btn-primary" style="width:100%;">Save</button>
+                <a href="<%= cancelUrl %>" class="btn" style="width:100%;text-align:center;display:block;text-decoration:none;">Cancel</a>
+              </div>
+              <% if (item) { %>
+              <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border);">
+                <div style="font-size:9px;color:var(--grey-text);">
+                  Created: <%= item.created_at.substring(0,10).replace(/-/g,'/') %><br>
+                  Updated: <%= item.updated_at.substring(0,10).replace(/-/g,'/') %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const ta = document.getElementById('md-content');
+  const preview = document.getElementById('md-preview');
+  const wrap = document.getElementById('preview-wrap');
+  const btn = document.getElementById('toggle-preview');
+  let showing = false;
+  function updatePreview() { if (showing) preview.innerHTML = marked.parse(ta.value || ''); }
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    showing = !showing;
+    wrap.style.display = showing ? 'flex' : 'none';
+    btn.textContent = showing ? 'Hide Preview' : 'Show Preview';
+    updatePreview();
+  });
+  ta.addEventListener('input', updatePreview);
+</script>
+</body>
+</html>

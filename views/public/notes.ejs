@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body>
+<%- include('../partials/public-header', { activePage }) %>
+<div id="page-shell">
+<div id="breadcrumb"><a href="/">Home</a><span class="bcsep">&gt;</span>Notes</div>
+<div id="main">
+  <div class="panel">
+    <div class="phead">Notes <span class="mu" style="font-weight:normal;font-size:10px;">— public entries</span></div>
+    <div class="pbody" style="padding:0;">
+      <% if (notes.length === 0) { %>
+        <div class="empty">No public notes yet.</div>
+      <% } else { %>
+        <div class="dtable-wrap">
+          <table class="dtable">
+            <thead>
+              <tr><th>Title</th><th style="width:90px;">Date</th><th>Tags</th></tr>
+            </thead>
+            <tbody>
+              <% notes.forEach(n => { %>
+              <tr>
+                <td>
+                  <a href="/notes/<%= n.slug %>" class="link"><%= n.title %></a>
+                  <% const ex = excerpt(n.content); if (ex) { %><div style="font-size:10px;color:var(--grey-text);margin-top:1px;"><%= ex.substring(0,100) %><%= ex.length>100?'...':'' %></div><% } %>
+                </td>
+                <td class="nw mu" style="font-size:10px;"><%= n.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                <td style="font-size:10px;"><%= n.tags || '' %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/public-footer') %>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body>
+<%- include('../partials/public-header', { activePage }) %>
+<div id="page-shell">
+<div id="breadcrumb"><a href="/">Home</a><span class="bcsep">&gt;</span><a href="/articles">Articles</a><span class="bcsep">&gt;</span><%= article.title %></div>
+<div id="main">
+  <div class="panel">
+    <div class="phead">
+      <%= article.title %>
+      <span class="ph-link mu" style="font-weight:normal;"><%= article.created_at.substring(0,10).replace(/-/g,'/') %></span>
+    </div>
+    <div class="pbody" style="padding:10px 12px;">
+      <% if (article.tags) { %>
+        <div style="margin-bottom:8px;"><% article.tags.split(',').forEach(t => { %><span class="tag"><%= t.trim() %></span><% }) %></div>
+      <% } %>
+      <div class="rc"><%- content %></div>
+    </div>
+  </div>
+  <div style="margin-top:6px;"><a href="/articles" class="btn">&laquo; Back to Articles</a></div>
+</div>
+<%- include('../partials/public-footer') %>
+</div>
+</body>
+</html>

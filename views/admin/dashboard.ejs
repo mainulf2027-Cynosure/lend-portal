@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+
+    <div id="breadcrumb" style="margin-bottom:6px;">Dashboard</div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.posts_pub %> <span style="font-size:13px;color:var(--grey-text);">/ <%= stats.posts %></span></div>
+        <div class="stat-lbl">Blog Posts (published)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.articles_pub %> <span style="font-size:13px;color:var(--grey-text);">/ <%= stats.articles %></span></div>
+        <div class="stat-lbl">Articles (published)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.projects_pub %> <span style="font-size:13px;color:var(--grey-text);">/ <%= stats.projects %></span></div>
+        <div class="stat-lbl">Projects (published)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.videos %></div>
+        <div class="stat-lbl">Videos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.notes %></div>
+        <div class="stat-lbl">Notes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="<%= stats.unread_contacts > 0 ? 'color:var(--red)':'' %>"><%= stats.unread_contacts %></div>
+        <div class="stat-lbl">Unread Messages</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num"><%= stats.media_files %></div>
+        <div class="stat-lbl">Media Files</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:6px;align-items:flex-start;">
+
+      <!-- Quick Actions -->
+      <div class="panel" style="width:160px;flex-shrink:0;">
+        <div class="phead">Quick Actions</div>
+        <div class="pbody" style="padding:4px;">
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <a href="/admin/blog/new"      class="btn btn-primary btn-sm" style="display:block;text-align:center;text-decoration:none;">+ New Post</a>
+            <a href="/admin/articles/new"  class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">+ New Article</a>
+            <a href="/admin/projects/new"  class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">+ New Project</a>
+            <a href="/admin/videos/new"    class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">+ Add Video</a>
+            <a href="/admin/notes/new"     class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">+ New Note</a>
+            <a href="/admin/about"         class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">Edit About</a>
+            <a href="/admin/contacts"      class="btn btn-sm" style="display:block;text-align:center;text-decoration:none;">View Messages</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent posts -->
+      <div class="panel" style="flex:1;">
+        <div class="phead">Recent Posts <span class="ph-link"><a href="/admin/blog" class="link">>> All</a></span></div>
+        <div class="pbody" style="padding:0;">
+          <% if (recentPosts.length === 0) { %>
+            <div class="empty">No posts yet.</div>
+          <% } else { %>
+            <table class="dtable" style="width:100%;">
+              <thead><tr><th>Title</th><th style="width:80px;">Date</th><th style="width:60px;" class="tc">Status</th></tr></thead>
+              <tbody>
+                <% recentPosts.forEach(p => { %>
+                <tr>
+                  <td><a href="/admin/blog/<%= p.id %>/edit" class="link"><%= p.title %></a></td>
+                  <td class="mu nw" style="font-size:10px;"><%= p.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                  <td class="tc"><span class="<%= p.published ? 's-app':'s-arc' %>"><%= p.published ? 'Published':'Draft' %></span></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Recent messages -->
+      <div class="panel" style="width:280px;flex-shrink:0;">
+        <div class="phead">Recent Messages <span class="ph-link"><a href="/admin/contacts" class="link">>> All</a></span></div>
+        <div class="pbody" style="padding:0;">
+          <% if (recentContacts.length === 0) { %>
+            <div class="empty">No messages yet.</div>
+          <% } else { %>
+            <table class="dtable" style="width:100%;">
+              <tbody>
+                <% recentContacts.forEach(c => { %>
+                <tr>
+                  <td>
+                    <% if (!c.read) { %><span class="s-new" style="font-size:9px;">[NEW]</span> <% } %>
+                    <strong style="font-size:11px;"><%= c.name %></strong>
+                    <div style="font-size:9px;color:var(--grey-text);"><%= c.subject || c.message.substring(0,40) %></div>
+                  </td>
+                  <td class="nw mu" style="font-size:9px;width:70px;"><%= c.created_at.substring(0,10).replace(/-/g,'/') %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

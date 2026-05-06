@@ -1,0 +1,26 @@
+<div id="top-header">
+  <div class="brand-row">
+    <div class="brand" style="min-width:200px;">
+      LEND
+      <span class="ed">Linear Engineering &amp; Neural Development</span>
+      <span class="ed" style="color:#f0d0d0;font-size:9px;">Mainul Fahad</span>
+    </div>
+    <div class="user-info">
+      <div class="f"><span class="l">Portal:</span> <span>Personal Research &amp; Development</span></div>
+      <div class="f"><span class="l">System:</span> <span class="online">&#9679; Operational</span></div>
+    </div>
+    <div class="top-actions">
+      <a href="/admin" class="btn" style="font-size:10px;">Admin</a>
+    </div>
+  </div>
+  <div id="navbar">
+    <div class="nav-item <%= activePage==='home'     ? 'active':'' %>"><a href="/"         style="color:inherit;text-decoration:none;">Home</a></div>
+    <div class="nav-item <%= activePage==='blog'     ? 'active':'' %>"><a href="/blog"     style="color:inherit;text-decoration:none;">Blog</a></div>
+    <div class="nav-item <%= activePage==='articles' ? 'active':'' %>"><a href="/articles" style="color:inherit;text-decoration:none;">Articles</a></div>
+    <div class="nav-item <%= activePage==='projects' ? 'active':'' %>"><a href="/projects" style="color:inherit;text-decoration:none;">Projects</a></div>
+    <div class="nav-item <%= activePage==='videos'   ? 'active':'' %>"><a href="/videos"   style="color:inherit;text-decoration:none;">Videos</a></div>
+    <div class="nav-item <%= activePage==='notes'    ? 'active':'' %>"><a href="/notes"    style="color:inherit;text-decoration:none;">Notes</a></div>
+    <div class="nav-item <%= activePage==='about'    ? 'active':'' %>"><a href="/about"    style="color:inherit;text-decoration:none;">About</a></div>
+    <div class="nav-item <%= activePage==='contact'  ? 'active':'' %>"><a href="/contact"  style="color:inherit;text-decoration:none;">Contact</a></div>
+  </div>
+</div>

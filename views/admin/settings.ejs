@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> Settings</div>
+
+    <div class="panel" style="max-width:480px;">
+      <div class="phead">Change Password</div>
+      <div class="pbody" style="padding:10px 12px;">
+        <form method="POST" action="/admin/settings/password">
+          <div class="ff">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required autocomplete="current-password" style="max-width:100%;">
+          </div>
+          <div class="ff">
+            <label>New Password <span class="ff-hint">(min 8 characters)</span></label>
+            <input type="password" name="new_password" required minlength="8" autocomplete="new-password" style="max-width:100%;">
+          </div>
+          <div class="ff">
+            <label>Confirm New Password</label>
+            <input type="password" name="confirm_password" required autocomplete="new-password" style="max-width:100%;">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel" style="max-width:480px;margin-top:8px;">
+      <div class="phead">System Information</div>
+      <div class="pbody" style="padding:8px 12px;">
+        <table style="width:100%;font-size:11px;border-collapse:collapse;">
+          <tr><td style="color:var(--grey-text);padding:2px 0;width:130px;">Portal:</td><td>LEND Personal Portal v1.0</td></tr>
+          <tr><td style="color:var(--grey-text);padding:2px 0;">Operator:</td><td><%= user ? user.username : '—' %></td></tr>
+          <tr><td style="color:var(--grey-text);padding:2px 0;">Public Site:</td><td><a href="/" target="_blank" class="link">/</a></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

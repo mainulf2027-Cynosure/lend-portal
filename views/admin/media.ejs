@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> Media Library</div>
+
+    <!-- Upload form -->
+    <div class="panel" style="margin-bottom:8px;">
+      <div class="phead">Upload Files</div>
+      <div class="pbody" style="padding:8px;">
+        <form method="POST" action="/admin/media/upload" enctype="multipart/form-data">
+          <div style="display:flex;gap:8px;align-items:flex-end;">
+            <div class="ff" style="flex:1;margin:0;">
+              <label>Select files (images, documents, etc.)</label>
+              <input type="file" name="files" multiple required style="font-size:11px;">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+          <div class="ff-hint" style="margin-top:3px;">Max 100 MB per file. After uploading, use the URL path <code>/uploads/media/[filename]</code> in your content.</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- File grid -->
+    <div class="panel">
+      <div class="phead">Files <span class="mu" style="font-weight:normal;font-size:10px;">(<%= files.length %> total)</span></div>
+      <div class="pbody">
+        <% if (files.length === 0) { %>
+          <div class="empty">No files uploaded yet.</div>
+        <% } else { %>
+          <div class="media-grid">
+            <% files.forEach(f => { %>
+            <div class="mi">
+              <% if (f.mimetype && f.mimetype.startsWith('image/')) { %>
+                <img src="/uploads/media/<%= f.filename %>" alt="<%= f.original_name %>" loading="lazy">
+              <% } else { %>
+                <div class="mi-noimg"><%= f.mimetype ? f.mimetype.split('/')[1] || 'file' : 'file' %></div>
+              <% } %>
+              <div class="mi-name" title="<%= f.original_name %>"><%= f.original_name %></div>
+              <div class="mi-meta"><%= formatBytes(f.size) %></div>
+              <div class="mi-act">
+                <a href="/uploads/media/<%= f.filename %>" target="_blank" class="link" style="font-size:9px;">Open</a>
+                &nbsp;|&nbsp;
+                <form method="POST" action="/admin/media/<%= f.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this file?')">
+                  <button type="submit" class="btn btn-sm" style="font-size:9px;color:var(--red);padding:0 3px;">Del</button>
+                </form>
+              </div>
+              <div style="padding:2px 4px;background:var(--row-even);">
+                <input type="text" value="/uploads/media/<%= f.filename %>" readonly class="copy-url" style="width:100%;background:transparent;border:none;outline:none;cursor:pointer;" onclick="this.select();document.execCommand('copy');" title="Click to copy URL">
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+</body>
+</html>

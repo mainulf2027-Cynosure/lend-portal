@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" width="220" height="60">
+  <rect width="220" height="60" fill="#5a0e0e"></rect>
+  <g fill="#f0d0d0" font-family="Tahoma, Verdana, sans-serif" font-weight="bold">
+    <text x="10" y="28" font-size="20" letter-spacing="1">LEND</text>
+    <text x="10" y="44" font-size="9" fill="#e8a8a8" letter-spacing="0.5">LINEAR ENGINEERING &amp;</text>
+    <text x="10" y="54" font-size="9" fill="#e8a8a8" letter-spacing="0.5">NEURAL DYNAMICS</text>
+  </g>
+  <g stroke="#f0d0d0" stroke-width="2" fill="none">
+    <line x1="170" y1="12" x2="170" y2="48"></line>
+    <line x1="180" y1="12" x2="180" y2="48"></line>
+    <line x1="190" y1="12" x2="190" y2="48"></line>
+    <line x1="200" y1="12" x2="200" y2="48"></line>
+    <line x1="210" y1="12" x2="210" y2="48"></line>
+  </g>
+  <rect x="165" y="48" width="50" height="2" fill="#f0d0d0"></rect>
+</svg>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title }) %>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<%- include('../partials/admin-header') %>
+<div id="admin-body">
+  <div id="admin-sidebar"><%- include('../partials/admin-sidebar', { section }) %></div>
+  <div id="admin-main">
+    <% if (flash) { %><div class="flash flash-<%= flash.type %>"><%= flash.message %></div><% } %>
+    <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> About Me</div>
+
+    <form method="POST" action="/admin/about">
+      <div style="display:flex;gap:6px;align-items:flex-start;">
+        <div style="flex:1;min-width:0;">
+          <div class="panel">
+            <div class="phead">
+              About Me Page (Markdown)
+              <span class="ph-link"><a href="#" id="toggle-preview" class="link">Show Preview</a></span>
+            </div>
+            <div class="pbody" style="padding:6px;">
+              <div style="font-size:10px;color:var(--grey-text);margin-bottom:6px;">
+                This content is displayed on the public <a href="/about" target="_blank" class="link">/about</a> page. Write in Markdown.
+              </div>
+              <div class="editor-split">
+                <div class="ff" style="flex:1;margin-bottom:0;">
+                  <textarea name="content" id="md-content" rows="32" style="width:100%;min-height:460px;" placeholder="Write your About Me in Markdown..."><%= content || '' %></textarea>
+                </div>
+                <div id="preview-wrap" style="flex:1;display:none;flex-direction:column;">
+                  <div class="preview-label">Preview</div>
+                  <div class="md-preview" id="md-preview" style="min-height:460px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:180px;flex-shrink:0;">
+          <div class="panel">
+            <div class="phead">Actions</div>
+            <div class="pbody" style="padding:8px;">
+              <button type="submit" class="btn btn-primary" style="width:100%;">Save</button>
+              <div style="margin-top:6px;">
+                <a href="/about" target="_blank" class="link" style="font-size:10px;">View Public Page &gt;&gt;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('../partials/admin-footer') %>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const ta=document.getElementById('md-content'),preview=document.getElementById('md-preview'),wrap=document.getElementById('preview-wrap'),btn=document.getElementById('toggle-preview');
+  let showing=false;
+  function up(){if(showing)preview.innerHTML=marked.parse(ta.value||'');}
+  btn.addEventListener('click',function(e){e.preventDefault();showing=!showing;wrap.style.display=showing?'flex':'none';btn.textContent=showing?'Hide Preview':'Show Preview';up();});
+  ta.addEventListener('input',up);
+</script>
+</body>
+</html>
