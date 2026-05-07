@@ -41,6 +41,7 @@
                   <td class="nw mu" style="font-size:10px;"><%= c.created_at.substring(0,10).replace(/-/g,'/') %><br><span style="font-size:9px;"><%= c.created_at.substring(11,16) %></span></td>
                   <td>
                     <form method="POST" action="/admin/contacts/<%= c.id %>/delete" onsubmit="return confirm('Delete this message?')">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <button type="submit" class="btn btn-sm" style="color:var(--red);">Delete</button>
                     </form>
                   </td>

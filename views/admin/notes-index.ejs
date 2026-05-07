@@ -31,6 +31,7 @@
                     <a href="/admin/notes/<%= n.id %>/edit" class="btn btn-sm">Edit</a>
                     <% if (n.public) { %><a href="/notes/<%= n.slug %>" target="_blank" class="btn btn-sm">View</a><% } %>
                     <form method="POST" action="/admin/notes/<%= n.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this note?')">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <button type="submit" class="btn btn-sm" style="color:var(--red);">Del</button>
                     </form>
                   </td>

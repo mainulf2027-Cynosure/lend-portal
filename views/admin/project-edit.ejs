@@ -10,6 +10,7 @@
     <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> <a href="/admin/projects" class="link">Projects</a> <span class="bcsep">&gt;</span> <%= project ? 'Edit' : 'New' %></div>
 
     <form method="POST" action="<%= project ? '/admin/projects/'+project.id+'/edit' : '/admin/projects/new' %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div style="display:flex;gap:6px;align-items:flex-start;">
 
         <div style="flex:1;min-width:0;">
@@ -103,7 +104,10 @@
                 <td class="nw mu" style="font-size:10px;"><%= formatBytes(f.size) %></td>
                 <td style="font-size:10px;color:var(--grey-text);"><%= f.description || '—' %></td>
                 <td>
-                  <a href="/admin/projects/files/<%= f.id %>/delete" class="btn btn-sm" style="color:var(--red);" onclick="return confirm('Delete this file?')">Delete</a>
+                  <form method="POST" action="/admin/projects/files/<%= f.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this file?')">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="btn btn-sm" style="color:var(--red);">Delete</button>
+                  </form>
                 </td>
               </tr>
               <% }) %>
@@ -113,6 +117,7 @@
           <div style="font-size:11px;color:var(--grey-text);margin-bottom:8px;">No files uploaded yet.</div>
         <% } %>
         <form method="POST" action="/admin/projects/<%= project.id %>/upload" enctype="multipart/form-data">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <div style="display:flex;gap:6px;align-items:flex-end;">
             <div class="ff" style="flex:1;margin:0;">
               <label>Upload File</label>

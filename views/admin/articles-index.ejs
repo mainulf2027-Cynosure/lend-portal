@@ -31,6 +31,7 @@
                     <a href="/admin/articles/<%= a.id %>/edit" class="btn btn-sm">Edit</a>
                     <% if (a.published) { %><a href="/articles/<%= a.slug %>" target="_blank" class="btn btn-sm">View</a><% } %>
                     <form method="POST" action="/admin/articles/<%= a.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this article?')">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <button type="submit" class="btn btn-sm" style="color:var(--red);">Del</button>
                     </form>
                   </td>

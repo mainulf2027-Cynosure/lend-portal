@@ -10,6 +10,7 @@
     <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> <a href="/admin/notes" class="link">Notes</a> <span class="bcsep">&gt;</span> <%= note ? 'Edit' : 'New' %></div>
 
     <form method="POST" action="<%= note ? '/admin/notes/'+note.id+'/edit' : '/admin/notes/new' %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div style="display:flex;gap:6px;align-items:flex-start;">
         <div style="flex:1;min-width:0;">
           <div class="panel" style="margin-bottom:6px;">

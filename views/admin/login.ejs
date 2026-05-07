@@ -18,6 +18,7 @@
       <div class="pbody" style="padding:12px;">
         <% if (flash) { %><div class="flash flash-<%= flash.type %>" style="margin-bottom:8px;"><%= flash.message %></div><% } %>
         <form method="POST" action="/admin/login">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <div class="ff">
             <label>Username:</label>
             <input type="text" name="username" autofocus required style="max-width:100%;">

@@ -14,6 +14,7 @@
       <div class="phead">Upload Files</div>
       <div class="pbody" style="padding:8px;">
         <form method="POST" action="/admin/media/upload" enctype="multipart/form-data">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <div style="display:flex;gap:8px;align-items:flex-end;">
             <div class="ff" style="flex:1;margin:0;">
               <label>Select files (images, documents, etc.)</label>
@@ -47,6 +48,7 @@
                 <a href="/uploads/media/<%= f.filename %>" target="_blank" class="link" style="font-size:9px;">Open</a>
                 &nbsp;|&nbsp;
                 <form method="POST" action="/admin/media/<%= f.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this file?')">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                   <button type="submit" class="btn btn-sm" style="font-size:9px;color:var(--red);padding:0 3px;">Del</button>
                 </form>
               </div>

@@ -6,7 +6,16 @@ const db = require('../db');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const slugify = require('slugify');
+const rateLimit = require('express-rate-limit');
 const requireAuth = require('../middleware/auth');
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many login attempts — please try again in 15 minutes.',
+});
 
 const UPLOAD_BASE = process.env.UPLOAD_BASE || path.join(__dirname, '../public/uploads');
 
@@ -55,7 +64,7 @@ router.get('/login', (req, res) => {
   res.render('admin/login', { title: 'Admin Login — LEND' });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', loginLimiter, (req, res) => {
   const { username, password } = req.body;
   const user = db.prepare('SELECT * FROM users WHERE username=?').get(username);
   if (!user || !bcrypt.compareSync(password, user.password_hash)) {
@@ -221,10 +230,10 @@ router.post('/projects/new', requireAuth, (req, res) => {
   res.redirect('/admin/projects');
 });
 
-router.get('/projects/files/:fileId/delete', requireAuth, (req, res) => {
+router.post('/projects/files/:fileId/delete', requireAuth, (req, res) => {
   const file = db.prepare('SELECT * FROM project_files WHERE id=?').get(req.params.fileId);
   if (file) {
-    const fp = path.join(__dirname, '../public/uploads/files', file.filename);
+    const fp = path.join(UPLOAD_BASE, 'files', file.filename);
     if (fs.existsSync(fp)) fs.unlinkSync(fp);
     db.prepare('DELETE FROM project_files WHERE id=?').run(file.id);
     req.session.flash = { type: 'success', message: 'File deleted.' };

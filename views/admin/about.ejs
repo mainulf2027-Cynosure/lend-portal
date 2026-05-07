@@ -10,6 +10,7 @@
     <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> About Me</div>
 
     <form method="POST" action="/admin/about">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div style="display:flex;gap:6px;align-items:flex-start;">
         <div style="flex:1;min-width:0;">
           <div class="panel">

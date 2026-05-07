@@ -10,6 +10,7 @@
     <div id="breadcrumb" style="margin-bottom:6px;">Admin <span class="bcsep">&gt;</span> <a href="/admin/videos" class="link">Videos</a> <span class="bcsep">&gt;</span> <%= video ? 'Edit' : 'New' %></div>
 
     <form method="POST" action="<%= video ? '/admin/videos/'+video.id+'/edit' : '/admin/videos/new' %>" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div style="display:flex;gap:6px;align-items:flex-start;">
 
         <div style="flex:1;min-width:0;">
